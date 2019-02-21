@@ -1,0 +1,36 @@
+;=rem Copy this file to macros.txt and edit macros.txt to meet your needs
+
+quick=cd "%START_DIR%\_stafffinder" && mvn -P all,skipass -DskipTests clean install >> somelog.txt 2>&1 && echo > "%JBOSS_HOME%\standalone\deployments\www-web.war.dodeploy"
+
+dropv2dbs="%START_DIR%\..\20_Scripts\10_DB\drop_v2_dbs.bat"
+copyV1db="%START_DIR%\..\20_Scripts\10_DB\copy_from_v1_to_test_db.bat"
+updatewww="%START_DIR%\..\20_Scripts\10_DB\liquibase-www.bat" update
+updatesf_read="%START_DIR%\..\20_Scripts\10_DB\liquibase-sf_read.bat" update
+updatesf_write="%START_DIR%\..\20_Scripts\10_DB\liquibase-sf_write.bat" update
+updatewwwjunit="%START_DIR%\..\20_Scripts\10_DB\liquibase-www-junit.bat" update
+package=cd "%START_DIR%\_stafffinder" && mvn -o -P www,skipjooq,skipwro4j,skipli -DskipTests package >> somelog.txt 2>&1 && echo > "%JBOSS_HOME%\standalone\deployments\www-web.war.dodeploy"
+cleanpackage=cd /d "%START_DIR%\_stafffinder" && mvn -o -P www -DskipTests clean package >> somelog.txt 2>&1 && echo > "%JBOSS_HOME%\standalone\deployments\www-web.war.dodeploy"
+install=cd /d "%START_DIR%\_stafffinder" && mvn -o -P www,skipli -DskipTests install >> somelog.txt 2>&1 && echo > "%JBOSS_HOME%\standalone\deployments\www-web.war.dodeploy"
+cleaninstall=cd /d "%START_DIR%\_stafffinder" && mvn -P skipass,www -DskipTests clean install >> somelog.txt 2>&1 && echo > "%JBOSS_HOME%\standalone\deployments\www-web.war.dodeploy"
+cleaninstallwithweb=cd /d "%START_DIR%\_stafffinder" && mvn -P all -DskipTests clean install >> somelog.txt 2>&1 && echo > "%JBOSS_HOME%\standalone\deployments\www-web.war.dodeploy"
+cleaninstallall=cd /d "%START_DIR%\_stafffinder" && mvn -o -P www,sfrmupd,cplstatsupd,evt-anonymizer -DskipTests clean install >> somelog.txt 2>&1 && echo > "%JBOSS_HOME%\standalone\deployments\evt-anonymizer.war.dodeploy" && echo > "%JBOSS_HOME%\standalone\deployments\sf-rm-upd.war.dodeploy" && echo > "%JBOSS_HOME%\standalone\deployments\www-web.war.dodeploy" && echo > "%JBOSS_HOME%\standalone\deployments\cpl-stats-upd.war.dodeploy"
+web3=cd /d "%START_DIR%" && mvn -f www-assets3/pom.xml -DskipTests=false clean install>>somelog.txt
+clean=cd /d "%START_DIR%\_stafffinder" && mvn -o clean >> somelog.txt 2>&1
+mvnlog=C:\cygwin\bin\tail.exe -f "%START_DIR%\_stafffinder\somelog.txt"
+startwildfly=cls && cd /d "%JBOSS_HOME%" && bin\standalone.bat --server-config=standalone-full.xml
+startwildflyarq=cls && cd /d "%JBOSS_HOME%" && bin\standalone.bat --server-config=standalone-arquillian.xml -Djboss.server.config.dir=arquillian\configuration -Djboss.server.base.dir=arquillian
+stopwildfly=cd /d "%JBOSS_HOME%" && bin\jboss-cli.bat --connect --command=shutdown
+cli=cd /d "%JBOSS_HOME%" && bin\jboss-cli.bat --connect
+copytvds=cd /d "%START_DIR%\_stafffinder" && xcopy ..\www-web\src\main\webapp ..\tvds\target\tvds /E /D /Y &&  xcopy ..\..\20_Scripts\10_DB\cms-contents\media ..\tvds\target\tvds\media /E /D /Y && del ..\tvds\target\tvds\WEB-INF\* /Q
+deploywww=cd /d "%JBOSS_HOME%" && (rmdir standalone\deployments\www-web.war || echo.) && mklink /D standalone\deployments\www-web.war %START_DIR%\www-web\target\www-web && echo > standalone\deployments\www-web.war.dodeploy
+deploytvds=cd /d "%JBOSS_HOME%" && (rmdir standalone\deployments\tvds.war || echo.) && mklink /D standalone\deployments\tvds.war %START_DIR%\tvds\target\tvds && echo > standalone\deployments\tvds.war.dodeploy
+deploypavelscript=cd /d "%JBOSS_HOME%" && (rmdir standalone\deployments\pavelscript.war || echo.) && mklink /D standalone\deployments\pavelscript.war %START_DIR%\..\20_Scripts\70_TestData\PavelScript && echo > standalone\deployments\pavelscript.war.dodeploy
+deployswagger=cd /d "%JBOSS_HOME%" && del standalone\deployments\swagger.war && mklink standalone\deployments\swagger.war %START_DIR%\..\20_Scripts\30_Server\localhost\swagger\swagger.war && echo > standalone\deployments\swagger.war.dodeploy
+pkgtests=cd /d "%START_DIR%\_stafffinder" && mvn -o -P all,skipjooq,skipli,skipass package >> somelog.txt 2>&1 && echo > "%JBOSS_HOME%\standalone\deployments\www-web.war.dodeploy"
+deploymigrator=cd "%JBOSS_HOME%" && del /Q standalone\deployments\v1-migrator.war && mklink /D standalone\deployments\v1-migrator.war %START_DIR%\v1-migrator\target\v1-migrator && echo > standalone\deployments\v1-migrator.war.dodeploy
+packagemigrator=cd "%START_DIR%\_stafffinder" && mvn -o -P migration,skipjooq,skipli -DskipTests package >> somelog.txt 2>&1 && echo > "%JBOSS_HOME%\standalone\deployments\v1-migrator.war.dodeploy"
+cimigrator=cd "%START_DIR%\_stafffinder" && mvn -o -P migration -DskipTests clean install >> somelog.txt 2>&1 && echo > "%JBOSS_HOME%\standalone\deployments\v1-migrator.war.dodeploy"
+..=cd ..
+ll=dir
+
+;=
